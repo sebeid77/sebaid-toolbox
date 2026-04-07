@@ -1,0 +1,31 @@
+groups:
+  - name: aurora_critical
+    rules:
+      - alert: AuroraDatabaseDown
+        expr: dba_database_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Aurora DB down ({{ $labels.database }})"
+          description: "Aurora {{ $labels.database }} ({{ $labels.environment }}) is DOWN."
+
+      - alert: AuroraBlockingSessions
+        expr: dba_blocked_sessions > 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Blocking sessions ({{ $labels.database }})"
+          description: "Blocking sessions present in {{ $labels.database }}."
+
+  - name: aurora_warning
+    rules:
+      - alert: AuroraLongRunningQueries
+        expr: dba_long_running_queries > 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Long running queries ({{ $labels.database }})"
+          description: "Long running queries on {{ $labels.database }}."

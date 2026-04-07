@@ -1,0 +1,33 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: "default"
+  routes:
+    - matchers:
+        - severity = "critical"
+      receiver: "slack_critical"
+    - matchers:
+        - severity = "warning"
+      receiver: "slack_warning"
+
+receivers:
+  - name: "default"
+
+  - name: "slack_critical"
+    slack_configs:
+      - api_url: "https://hooks.slack.com/services/XXX/YYY/ZZZ"
+        channel: "#db-alerts-critical"
+        title: "{{ .CommonAnnotations.summary }}"
+        text: "{{ .CommonAnnotations.description }}"
+
+  - name: "slack_warning"
+    slack_configs:
+      - api_url: "https://hooks.slack.com/services/AAA/BBB/CCC"
+        channel: "#db-alerts-warning"
+        title: "{{ .CommonAnnotations.summary }}"
+        text: "{{ .CommonAnnotations.description }}"
+
+  - name: "webhook_receiver"
+    webhook_configs:
+      - url: "https://your-webhook-endpoint.example.com/alerts"

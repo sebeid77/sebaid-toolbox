@@ -1,0 +1,69 @@
+{
+  "title": "Aurora PostgreSQL - Overview",
+  "uid": "aurora-overview",
+  "schemaVersion": 38,
+  "version": 1,
+  "templating": {
+    "list": [
+      {
+        "name": "environment",
+        "type": "query",
+        "datasource": "Prometheus",
+        "query": "label_values(dba_instance_status, environment)",
+        "refresh": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "table",
+      "title": "Aurora Instances Status",
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "dba_instance_status{environment=~\"$environment|\"}",
+          "format": "table"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "Issue",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "Healthy",
+                  "color": "green"
+                }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {
+              "Value": 3
+            }
+          }
+        }
+      ],
+      "links": [
+        {
+          "title": "View details",
+          "url": "/d/aurora-detail/aurora-server-detail?var-database=${__field.labels.database}"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+databases:
+  - name: prod_aurora_pg
+    engine: aurora_postgres
+    environment: test
+    host: "localhost"
+    port: 5432
+    user: monitor
+    password: monitorpass
+    database: postgres

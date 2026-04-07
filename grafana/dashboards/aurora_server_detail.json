@@ -1,0 +1,78 @@
+{
+  "title": "Aurora PostgreSQL - Server Detail",
+  "uid": "aurora-detail",
+  "schemaVersion": 38,
+  "version": 1,
+  "templating": {
+    "list": [
+      {
+        "name": "database",
+        "type": "query",
+        "datasource": "Prometheus",
+        "query": "label_values(dba_instance_status, database)",
+        "refresh": 1
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "timeSeries",
+      "title": "Active / Idle Connections",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "expr": "dba_active_connections{database=\"$database\"}",
+          "legendFormat": "active"
+        },
+        {
+          "expr": "dba_idle_connections{database=\"$database\"}",
+          "legendFormat": "idle"
+        }
+      ]
+    },
+    {
+      "type": "timeSeries",
+      "title": "Blocked Sessions",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "targets": [
+        {
+          "expr": "dba_blocked_sessions{database=\"$database\"}",
+          "legendFormat": "blocked"
+        }
+      ]
+    },
+    {
+      "type": "timeSeries",
+      "title": "Long Running Queries",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "targets": [
+        {
+          "expr": "dba_long_running_queries{database=\"$database\"}",
+          "legendFormat": "long_running"
+        }
+      ]
+    },
+    {
+      "type": "timeSeries",
+      "title": "Cache Hit Ratio",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "targets": [
+        {
+          "expr": "dba_cache_hit_ratio{database=\"$database\"}",
+          "legendFormat": "cache_hit"
+        }
+      ]
+    },
+    {
+      "type": "timeSeries",
+      "title": "Database Size",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "targets": [
+        {
+          "expr": "dba_database_size_bytes{database=\"$database\"}",
+          "legendFormat": "size"
+        }
+      ]
+    }
+  ]
+}
